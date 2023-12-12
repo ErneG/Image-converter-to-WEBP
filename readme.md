@@ -1,7 +1,12 @@
 # Image Converter Script
 
-This script monitors a specific folder and automatically converts new images added to this folder to WEBP format.
+This script automatically converts new images added to a specified folder to WEBP format, based on settings defined in a `config.txt` file.
+
+## Configuration
+- Set the `FOLDER_TO_WATCH` and `QUALITY` values in `config.txt`.
+- `FOLDER_TO_WATCH`: Path of the folder to monitor.
+- `QUALITY`: Quality of the converted WEBP images.
 
 ## How to Use
-- Set the `folder_to_watch` variable to the path of the folder you want to monitor.
-- Run the script. Any new image files added to this folder will be automatically converted to WEBP format.
+- Update the settings in `config.txt`.
+- Run the script. It will monitor the specified folder and convert new images to WEBP format.
