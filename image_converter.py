@@ -1,4 +1,5 @@
 import os
+import shutil
 from PIL import Image
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -25,6 +26,10 @@ def ensure_folder_exists(folder):
         os.makedirs(folder)
         print(f"Created folder: {folder}")
 
+def move_files_to_history(output_folder, history_folder):
+    for file in os.listdir(output_folder):
+        shutil.move(os.path.join(output_folder, file), history_folder)
+
 class WatchDirectory(FileSystemEventHandler):
     def __init__(self, quality, output_folder):
         self.quality = quality
@@ -38,9 +43,13 @@ class WatchDirectory(FileSystemEventHandler):
 if __name__ == "__main__":
     config = read_config('config.txt')
     output_folder = config['OUTPUT_FOLDER']
+    history_folder = config['HISTORY_FOLDER']
+    
     ensure_folder_exists(output_folder)
-    observers = []
+    ensure_folder_exists(history_folder)
+    move_files_to_history(output_folder, history_folder)
 
+    observers = []
     for key, value in config.items():
         if key.startswith('FOLDER_'):
             quality = int(key.split('_')[1])
