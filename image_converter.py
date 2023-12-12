@@ -5,15 +5,21 @@ from PIL import Image
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
+def get_new_filename(original_path, quality):
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")  # Compact timestamp
+    basename = os.path.splitext(os.path.basename(original_path))[0][:15]  # First 15 characters
+    return f"{timestamp}_{quality}_{basename}.webp"
+
 def convert_to_webp(image_path, output_path, quality):
     try:
         with Image.open(image_path) as img:
-            output_file = os.path.join(output_path, os.path.basename(image_path) + '.webp')
+            new_filename = get_new_filename(image_path, quality)
+            output_file = os.path.join(output_path, new_filename)
             img.convert('RGB').save(output_file, 'webp', quality=quality)
-            print(f"Converted image: {os.path.basename(image_path)} at quality {quality}")
+            print(f"Converted image: {new_filename}")
     except Exception as e:
         print(f"Error converting {os.path.basename(image_path)}: {e}")
-
+        
 def read_config(file_path):
     config = {}
     with open(file_path, 'r') as file:

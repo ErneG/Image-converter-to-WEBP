@@ -1,11 +1,15 @@
 # Image Converter Script
 
-This script monitors multiple folders for new images, converts them to WEBP format, and saves them to an output folder. It also moves existing output files to a history folder each time the script runs, ensuring unique preservation by appending a timestamp to any duplicate filenames.
+This script automatically converts images added to specific folders to WEBP format and saves them to an output folder using a unique naming convention.
+
+## Naming Convention
+- Converted images are named: '[YYYYMMDD_HHMMSS]_[quality]_[original_filename:15].webp'.
+- This format ensures filenames are unique and sorted chronologically.
 
 ## Configuration
-- Define source folders and their respective qualities in `config.txt`.
-- Specify the output folder and history folder in `config.txt`.
+- Set source folders and quality settings in `config.txt`.
+- Specify the output and history folders in `config.txt`.
 
 ## How to Use
-- Update `config.txt` with your folder paths and quality settings.
-- Run the script. It will manage the output and history folders, avoiding any file overwrite issues.
+- Adjust `config.txt` with folder paths and quality settings.
+- Run the script to automatically convert and manage new images.
