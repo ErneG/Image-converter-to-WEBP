@@ -33,12 +33,16 @@ class GuiPart:
         self.queue = queue
         self.master = master
         self.file_path = None
+        self.output_folder = StringVar(master, value='./OUTPUT')  # Default output folder
         self.quality = StringVar(master, value='75')  # Default quality value
 
         master.title("Image Converter")
 
         self.upload_button = Button(master, text="Upload Image", command=self.upload_image)
         self.upload_button.pack(pady=5)
+
+        self.folder_button = Button(master, text="Choose Output Folder", command=self.choose_output_folder)
+        self.folder_button.pack(pady=5)
 
         self.quality_label = Label(master, text="Quality (1-100):")
         self.quality_label.pack(pady=5)
@@ -59,10 +63,17 @@ class GuiPart:
         if self.file_path:
             self.text_area.insert(END, f"Selected file: {self.file_path}\n")
 
+    def choose_output_folder(self):
+        folder_selected = filedialog.askdirectory()
+        if folder_selected:
+            self.output_folder.set(folder_selected)
+            self.text_area.insert(END, f"Output folder set to: {folder_selected}\n")
+
     def convert_image(self):
         if self.file_path and self.quality.get().isdigit():
             quality_val = int(self.quality.get())
-            output_folder = './OUTPUT'  # Default output folder
+            output_folder = self.output_folder.get()
+            ensure_folder_exists(output_folder)
             convert_to_webp(self.file_path, output_folder, quality_val, self.queue)
         else:
             self.queue.put("Please select an image and set a valid quality value.")
