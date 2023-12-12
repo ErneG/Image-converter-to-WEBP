@@ -8,20 +8,17 @@ def convert_to_webp(image_path, output_path, quality):
         with Image.open(image_path) as img:
             output_file = os.path.join(output_path, os.path.basename(image_path) + '.webp')
             img.convert('RGB').save(output_file, 'webp', quality=quality)
-            print(f"Successfully converted '{os.path.basename(image_path)}' to WEBP at '{output_path}' with quality {quality}.")
+            print(f"Converted image: {os.path.basename(image_path)} at quality {quality}")
     except Exception as e:
-        print(f"Error converting '{image_path}': {e}")
+        print(f"Error converting {os.path.basename(image_path)}: {e}")
 
 def read_config(file_path):
     config = {}
-    base_path = os.path.dirname(os.path.abspath(file_path))
     with open(file_path, 'r') as file:
         for line in file:
             key, value = line.strip().split('=')
-            abs_path = os.path.abspath(os.path.join(base_path, value))  # Convert to absolute path
-            config[key] = abs_path
+            config[key] = value
     return config
-
 
 class WatchDirectory(FileSystemEventHandler):
     def __init__(self, quality, output_folder):
@@ -30,7 +27,7 @@ class WatchDirectory(FileSystemEventHandler):
 
     def on_created(self, event):
         if not event.is_directory and event.src_path.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', '.gif')):
-            print(f"Received task for '{event.src_path}'. Quality: {self.quality}")
+            print(f"Received event for: {event.src_path}")
             convert_to_webp(event.src_path, self.output_folder, self.quality)
 
 if __name__ == "__main__":
@@ -47,7 +44,7 @@ if __name__ == "__main__":
             observer.schedule(event_handler, folder_to_watch, recursive=False)
             observer.start()
             observers.append(observer)
-            print(f"Monitoring '{folder_to_watch}' for quality {quality}")
+            print(f"Monitoring {folder_to_watch} at quality {quality}")
 
     try:
         while True:
@@ -57,4 +54,4 @@ if __name__ == "__main__":
             observer.stop()
         for observer in observers:
             observer.join()
-        print("Stopped all observers")
+        print("Stopped monitoring.")
