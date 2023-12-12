@@ -1,5 +1,6 @@
 import os
 import shutil
+import datetime
 from PIL import Image
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -28,7 +29,18 @@ def ensure_folder_exists(folder):
 
 def move_files_to_history(output_folder, history_folder):
     for file in os.listdir(output_folder):
-        shutil.move(os.path.join(output_folder, file), history_folder)
+        original_path = os.path.join(output_folder, file)
+        new_path = os.path.join(history_folder, file)
+        
+        # Check if the file already exists in the history folder
+        if os.path.exists(new_path):
+            # Create a new file name with a timestamp to prevent overwriting
+            timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+            basename, extension = os.path.splitext(file)
+            new_filename = f"{basename}_{timestamp}{extension}"
+            new_path = os.path.join(history_folder, new_filename)
+        
+        shutil.move(original_path, new_path)
 
 class WatchDirectory(FileSystemEventHandler):
     def __init__(self, quality, output_folder):
