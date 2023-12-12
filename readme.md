@@ -6,6 +6,10 @@ This script automatically converts images added to specific folders to WEBP form
 - Converted images are named: '[YYYYMMDD_HHMMSS]_[quality]_[original_filename:15].webp'.
 - This format ensures filenames are unique and sorted chronologically.
 
+## Error Handling
+- The script now handles various errors, ensuring continuous operation.
+- Specific error messages are provided for file access and image processing issues.
+
 ## Configuration
 - Set source folders and quality settings in `config.txt`.
 - Specify the output and history folders in `config.txt`.

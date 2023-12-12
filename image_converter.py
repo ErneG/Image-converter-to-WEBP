@@ -17,6 +17,8 @@ def convert_to_webp(image_path, output_path, quality):
             output_file = os.path.join(output_path, new_filename)
             img.convert('RGB').save(output_file, 'webp', quality=quality)
             print(f"Converted image: {new_filename}")
+    except IOError as e:
+        print(f"IOError with file {image_path}: {e}")
     except Exception as e:
         print(f"Error converting {os.path.basename(image_path)}: {e}")
         
@@ -59,33 +61,36 @@ class WatchDirectory(FileSystemEventHandler):
             convert_to_webp(event.src_path, self.output_folder, self.quality)
 
 if __name__ == "__main__":
-    config = read_config('config.txt')
-    output_folder = config['OUTPUT_FOLDER']
-    history_folder = config['HISTORY_FOLDER']
-    
-    ensure_folder_exists(output_folder)
-    ensure_folder_exists(history_folder)
-    move_files_to_history(output_folder, history_folder)
-
-    observers = []
-    for key, value in config.items():
-        if key.startswith('FOLDER_'):
-            quality = int(key.split('_')[1])
-            folder_to_watch = value
-            ensure_folder_exists(folder_to_watch)
-            event_handler = WatchDirectory(quality, output_folder)
-            observer = Observer()
-            observer.schedule(event_handler, folder_to_watch, recursive=False)
-            observer.start()
-            observers.append(observer)
-            print(f"Monitoring {folder_to_watch} at quality {quality}")
-
     try:
-        while True:
-            pass
-    except KeyboardInterrupt:
-        for observer in observers:
-            observer.stop()
-        for observer in observers:
-            observer.join()
-        print("Stopped monitoring.")
+        config = read_config('config.txt')   
+        output_folder = config['OUTPUT_FOLDER']
+        history_folder = config['HISTORY_FOLDER']
+        
+        ensure_folder_exists(output_folder)
+        ensure_folder_exists(history_folder)
+        move_files_to_history(output_folder, history_folder)
+
+        observers = []
+        for key, value in config.items():
+            if key.startswith('FOLDER_'):
+                quality = int(key.split('_')[1])
+                folder_to_watch = value
+                ensure_folder_exists(folder_to_watch)
+                event_handler = WatchDirectory(quality, output_folder)
+                observer = Observer()
+                observer.schedule(event_handler, folder_to_watch, recursive=False)
+                observer.start()
+                observers.append(observer)
+                print(f"Monitoring {folder_to_watch} at quality {quality}")
+
+        try:
+            while True:
+                pass
+        except KeyboardInterrupt:
+            for observer in observers:
+                observer.stop()
+            for observer in observers:
+                observer.join()
+            print("Stopped monitoring.")
+    except Exception as e:
+        print(f"Error reading configuration or setting up observers: {e}")
