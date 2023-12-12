@@ -56,27 +56,32 @@ class GuiPart:
         self.text_area = scrolledtext.ScrolledText(master, wrap=WORD, height=10)
         self.text_area.pack(padx=10, pady=10, fill=BOTH, expand=True)
 
-    def upload_image(self):
-        self.file_path = filedialog.askopenfilename(
-            filetypes=[("Image Files", "*.jpeg;*.jpg;*.png;*.bmp;*.gif")]
-        )
-        if self.file_path:
-            self.text_area.insert(END, f"Selected file: {self.file_path}\n")
-
     def choose_output_folder(self):
         folder_selected = filedialog.askdirectory()
         if folder_selected:
             self.output_folder.set(folder_selected)
             self.text_area.insert(END, f"Output folder set to: {folder_selected}\n")
 
+    def upload_image(self):
+        self.file_paths = filedialog.askopenfilenames(
+            filetypes=[("Image Files", "*.jpeg;*.jpg;*.png;*.bmp;*.gif")]
+        )
+        if self.file_paths:
+            selected_files = "\n".join(self.file_paths)
+            self.text_area.insert(END, f"Selected files:\n{selected_files}\n")
+
     def convert_image(self):
-        if self.file_path and self.quality.get().isdigit():
+        if self.file_paths and self.quality.get().isdigit():
             quality_val = int(self.quality.get())
             output_folder = self.output_folder.get()
             ensure_folder_exists(output_folder)
-            convert_to_webp(self.file_path, output_folder, quality_val, self.queue)
+            for file_path in self.file_paths:
+                try:
+                    convert_to_webp(file_path, output_folder, quality_val, self.queue)
+                except Exception as e:
+                    self.queue.put(f"Error converting {os.path.basename(file_path)}: {e}")
         else:
-            self.queue.put("Please select an image and set a valid quality value.")
+            self.queue.put("Please select images and set a valid quality value.")
 
     def process_incoming(self):
         while self.queue.qsize():
