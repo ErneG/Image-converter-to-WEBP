@@ -20,6 +20,11 @@ def read_config(file_path):
             config[key] = value
     return config
 
+def ensure_folder_exists(folder):
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+        print(f"Created folder: {folder}")
+
 class WatchDirectory(FileSystemEventHandler):
     def __init__(self, quality, output_folder):
         self.quality = quality
@@ -33,12 +38,14 @@ class WatchDirectory(FileSystemEventHandler):
 if __name__ == "__main__":
     config = read_config('config.txt')
     output_folder = config['OUTPUT_FOLDER']
+    ensure_folder_exists(output_folder)
     observers = []
 
     for key, value in config.items():
         if key.startswith('FOLDER_'):
             quality = int(key.split('_')[1])
             folder_to_watch = value
+            ensure_folder_exists(folder_to_watch)
             event_handler = WatchDirectory(quality, output_folder)
             observer = Observer()
             observer.schedule(event_handler, folder_to_watch, recursive=False)
