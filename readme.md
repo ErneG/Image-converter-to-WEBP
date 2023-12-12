@@ -1,7 +1,7 @@
 # Image Converter Script
 
-This script provides a basic functionality to convert images to WEBP format.
+This script monitors a specific folder and automatically converts new images added to this folder to WEBP format.
 
 ## How to Use
-- Specify the path to your image in the `image_path` variable.
-- Run the script to convert the image to WEBP format.
+- Set the `folder_to_watch` variable to the path of the folder you want to monitor.
+- Run the script. Any new image files added to this folder will be automatically converted to WEBP format.
