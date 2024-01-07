@@ -13,7 +13,7 @@ This script features an enhanced GUI that allows users to manually select multip
 
 ## Installation and Setup
 
-Before running the Image Converter, ensure you have Python installed on your system. This application is developed and tested with Python 3.8, but it should be compatible with other recent Python 3 versions.
+Before running the Image Converter, ensure you have Python installed on your system. This application is developed and tested with Python 3.10.
 
 1. **Clone or Download the Repository**:
 
@@ -50,7 +50,7 @@ Before running the Image Converter, ensure you have Python installed on your sys
 4. **Run the Application**:
 
 ```
-    python src/app.py
+    python -m src.app
 ```
 
 ## Usage
