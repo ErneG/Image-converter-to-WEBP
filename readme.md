@@ -7,7 +7,7 @@ This script features an enhanced GUI that allows users to manually select multip
 -   Select multiple images for conversion using a file dialog.
 -   Ability to choose the desired output folder for the converted images.
 -   Specify the conversion quality for the WEBP format (1-100).
--   Converted images are saved in the selected output folder with unique naming: '[YYYYMMDD_HHMMSS]_[quality]_[original_filename:15].webp'.
+-   Converted images are saved in the selected output folder with unique naming: '[YYYYMMDD_HHMMSS]\_[quality]\_[original_filename:15].webp'.
 -   Real-time log messages are displayed in the GUI, including conversion status and error messages for each image.
 -   Toggleable dark mode for the GUI.
 
@@ -16,8 +16,14 @@ This script features an enhanced GUI that allows users to manually select multip
 Before running the Image Converter, ensure you have Python installed on your system. This application is developed and tested with Python 3.8, but it should be compatible with other recent Python 3 versions.
 
 1. **Clone or Download the Repository**:
-   `git clone https://github.com/SolidDeath/Image-converter-to-WEBP.git`
-   `cd ImageConverter`
+
+    ```
+    git clone https://github.com/SolidDeath/Image-converter-to-WEBP.git
+    ```
+
+    ```
+    cd ImageConverter
+    ```
 
 2. **Set Up a Virtual Environment** (Optional but recommended):
 
@@ -37,11 +43,15 @@ Before running the Image Converter, ensure you have Python installed on your sys
 
 3. **Install Dependencies**:
 
-`pip install -r requirements.txt`
+```
+    pip install -r requirements.txt
+```
 
 4. **Run the Application**:
 
-`python src/app.py`
+```
+    python src/app.py
+```
 
 ## Usage
 
